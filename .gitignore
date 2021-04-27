@@ -3,6 +3,7 @@
 *.out
 *.json
 *.pyc
+*.txt
 
 /venv
 /.idea
