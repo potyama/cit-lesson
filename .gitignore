@@ -4,6 +4,7 @@
 *.json
 *.pyc
 *.txt
+*.tar
 
 /venv
 /.idea
