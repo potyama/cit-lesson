@@ -5,6 +5,10 @@
 *.pyc
 *.txt
 *.tar
+*.ppm
+*.a
+*.h
+*.zip
 
 /venv
 /.idea
