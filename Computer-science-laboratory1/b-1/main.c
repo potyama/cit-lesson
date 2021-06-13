@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <omp.h>
 #include "jikken.h"
 
 int main(int argc, char *argv[])
@@ -27,16 +28,22 @@ make_matrix(size, 1, A, B, 1931702);
 
 /* ここまで実行すると、size に行列サイズが代入されます。*/
 /* これより下にプログラムを作成してください。*/
-
+int i,j, k=0;
+double start=0.0,end=0.0;
 //行列計算
-  for(int i=0; i<size; i++){
-    for(int j=0; j<size; j++){
-      for(int k=0; k<size; k++){
+start = omp_get_wtime();
+#pragma omp parallel for private(j,k);
+  for(i=0; i<size; i++){
+    for(j=0; j<size; j++){
+      for(k=0; k<size; k++){
+        printf("i=%d, j=%d,k=%d id =%d \n",i,j,k, omp_get_thread_num());
         C[i][j] += A[i][k] * B[k][j];
       }
     }
   }
+  end = omp_get_wtime();
   check_matrix(size, C, 1931702);
+  printf("%lf\n", end-start);
   return 0;
 }
 
