@@ -10,13 +10,9 @@
 
 double Forward(double *input, int ni, double wio[ni]);
 int Backward(double *input, double output, int ni,
- double wio[ni], double eta, double teacher);
+double wio[ni], double eta, double teacher);
 
-
-
-
-double Forward(double *input, int ni, double wio[ni])
-{
+double Forward(double *input, int ni, double wio[ni]){
   double f=0,y=0;
   for(int i=0;i<ni;i++){
     f += input[i]*wio[i];
@@ -31,8 +27,7 @@ double Forward(double *input, int ni, double wio[ni])
   return y;
 }
 
-int Backward(double *input, double output, int ni, 
-	double wio[ni], double eta, double teacher){
+int Backward(double *input, double output, int ni, double wio[ni], double eta, double teacher){
   for(int i=0; i<ni; i++){
     wio[i] += eta * (teacher-output)*input[i];
   }
@@ -103,12 +98,12 @@ int main(int argc, char *argv[])
 			output=Forward(input, INPUTSIZE, weight_io);
 			rms+=(teacher[i*(2)+j][2]-output)*(teacher[i*(2)+j][2]-output);
 			i_rms++;
-			printf("INPUT: %d %d OUTPUT: %f %f\n", i, j,
-			 output,(teacher[i*(2)+j][2]));
+			printf("INPUT: %d %d OUTPUT: %f %f\n", i, j, output,(teacher[i*(2)+j][2]));
+			printf("LOOPNUM:%d RMS:%f\n",i*2+j,sqrt(rms)/i_rms);
+
 		}
 	}
 
-	printf("LOOPNUM:%d RMS:%f\n",LOOPNUM,sqrt(rms)/i_rms);
 
 
 	return 0;
