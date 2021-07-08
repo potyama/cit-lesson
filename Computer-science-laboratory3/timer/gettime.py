@@ -8,7 +8,8 @@ class getData(object):
         self.ser = serial.Serial('/dev/ttyACM0', 9600, timeout=1)
         self.val = 0
         self.start = time.perf_counter()
-        self.tmp_time = 1
+        self.tmp_time = 0
+        self.count = 0
 
     def get_data(self):
         self.val = self.ser.readline().strip()
@@ -17,15 +18,18 @@ class getData(object):
         return self.val
 
     def check(self):
-        for i in range(0, 10):
+        print("check")
+        self.check_time = time.perf_counter()
+        for i in range(0, 5):
             val = self.get_data()
             print(val, i)
 
-            if  val < 80:
-                self.tmp_time += float(i)
+            if  val < 55:
+                self.tmp_time += time.perf_counter() - self.check_time
+                print("ok")
                 return 1
 
-        self.tmp_time += float(i)
+        self.tmp_time += time.perf_counter() - self.check_time
         return 0
 
     def ser_close(self):
@@ -34,6 +38,7 @@ class getData(object):
     def timer(self):
         self.end = time.perf_counter()
         print("timer:\n")
+        print(round((self.end-self.start)-self.tmp_time, 2))
         self.time = int(round((self.end-self.start)-self.tmp_time, 2))
         print(self.time)
         return self.time
