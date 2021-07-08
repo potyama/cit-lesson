@@ -69,8 +69,23 @@ if __name__ == '__main__':
 
     conn = sqlite3.connect("time.db")
     cursor = conn.cursor()
+
+    create_table = """CREATE TABLE IF NOT EXISTS timedata (data TEXT, time INTEGER NOT NULL);"""
+    conn.execute(create_table)
+    conn.commit()
+
     insert_data = """INSERT INTO timedata VALUES("{0}",{1});""".format(date, get_time)
     cursor.execute(insert_data)
 
     conn.commit()
+
+    """
+    query = "SELECT * FROM timedata"
+    cursor.execute(query)
+    result = cursor.fetchall()
+
+    for i in result:
+        print(i)
+    """
+
     conn.close()
