@@ -5,13 +5,14 @@ import time
 class getData(object):
 
     def __init__(self):
-        self.ser = serial.Serial('/dev/ttyACM0', 9600, timeout=1)
+        self.ser = serial.Serial('/dev/ttyACM1', 9600, timeout=1)
         self.val = 0
         self.start = time.perf_counter()
         self.tmp_time = 0
         self.count = 0
 
     def get_data(self):
+        self.ser.write(bytes('a','utf-8'))
         self.val = self.ser.readline().strip()
         self.val = float(self.val)
 
@@ -33,6 +34,7 @@ class getData(object):
         return 0
 
     def ser_close(self):
+        self.ser.write(bytes('b','utf-8'))
         self.ser.close()
 
     def timer(self):
@@ -63,6 +65,11 @@ if __name__ == '__main__':
                     data.ser_close()
                     break
 
+            elif val < 0:
+                print("forced termination")
+                data.ser.close()
+                get_time = data.timer()
+                break
             else:
                 print("val: {}".format(val))
         except ValueError:
