@@ -1,0 +1,11 @@
+  LOD 1 67
+L SUBI 1 1
+  JMP 1 M
+  LODI 2 111
+  STR 2 41
+  JMP 2 N
+M SUBI 1 1
+  JMP 1 L
+  LODI 2 222
+  STR 2 41
+N HLT
