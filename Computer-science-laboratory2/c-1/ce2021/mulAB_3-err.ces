@@ -1,8 +1,0 @@
-# M(30) <- [M(20)] * [M(21)]
-  LODI 1   0
-  LOD  2  21
-L ADD  1  20
-  SUBI 2   2
-  JMP  2   L
-  STR  1  30
-  HLT
