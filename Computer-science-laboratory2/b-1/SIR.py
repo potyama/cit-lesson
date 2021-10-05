@@ -1,35 +1,46 @@
-import numpy as np
-from scipy.integrate import odeint
-import matplotlib.pyplot as plt
-
-# S = 0 I = 1, R = 2
+import numpy as np  # あとで必要
+import matplotlib.pyplot as plt  # グラフ描画用
 
 
-def SIReq(SIR, t, gamma, beta):
-    dS = -gamma*SIR[0]*SIR[1]
-    dI = (gamma/N)*SIR[1]*SIR[0] - beta*SIR[1]
-    dR = gamma*SIR[1]
+def euler(x0, tau, ts, tf, f):
+    ti = ts  # ti: 前進オイラー法のアルゴリズムのti
+    xi = x0  # xi: 前進オイラー法のアルゴリズムのx(ti)
+    tlist = [ti]
+    xlist = [x0]
+    # tiがtfにたどり着いたら終了
+    while ti < tf:
+        tip1 = ti + tau  # tipi: 前進オイラー法のアルゴリズムのt_{i+1} (次の時刻)
+        xip1 = xi + (tip1 - ti) * f(ti, xi)  # [入力]:問7の解答(前進オイラー法のアルゴリズム)を記入
+        tlist.append(tip1)  # 時刻記録用: リストの末尾に時刻を追加
+        xlist.append(xip1)  # 結果の記録用: リストの末尾に結果xip1を追加
+        ti, xi = tip1, xip1  # 時刻tip1と結果xip1は、次の時刻における初期値
 
-    return [dS, dI, dR]
+    return (tlist, xlist)
 
 
-t = np.linspace(0, 30, 1000)  # time
-beta = 1
-gamma = 0.2  # parameters
+def population(t, N):
+    fN = np.zeros_like(N)
+    gamma = 0.03
+    beta = 0.001
+    N = N[0] + N[1] + N[2]
 
-initvar = [0.9, 0.1, 0]  # [S(0), I(0), R(0)]
-SIRlist = odeint(SIReq, initvar, t, args=(beta, gamma))
+    fN[0] = -(gamma/N)*N[0]*N[1]
+    fN[1] = (gamma/N)*N[0]*N[1] - beta*N[2]
+    fN[2] = beta * N[1]
+    return fN
 
-fig, ax = plt.subplots()
-ax.set_xlabel('time')
-ax.set_ylabel('population')
-ax.set_title(r'Time evolution of $(S(t), I(t), R(t))$')
-ax.grid()
-ax.plot(t, SIRlist[:, 0], linestyle="solid", label="S", color="black")
-ax.plot(t, SIRlist[:, 1], linestyle="dotted", label="I", color="black")
-ax.plot(t, SIRlist[:, 2], linestyle="dashed", label="R", color="black")
-ax.legend(loc=0)
-fig.tight_layout()
-plt.show()
 
-print('R0 =', beta/gamma)
+# 0: 人口 1: S 2: I 3:R
+N0 = np.zeros(3)
+N0[0] = 5500    # [入力]:人口の初期値(1920年の人口を万人で入力。10万人なら10と入力)
+N0[1] = 33
+N0[2] = 0
+begin_year = 1920
+end_year = 2008
+
+t, N = euler(N0, 0.1, begin_year, end_year, population)  # 前進オイラー法で解く
+
+plt.plot(t, N)  # 図の描画
+plt.xlabel('Year')
+plt.ylabel('Population [* 10,000]')
+plt.show()  # 図の描画
