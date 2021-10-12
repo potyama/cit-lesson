@@ -19,7 +19,7 @@ void setup ()
   float amp = 0.6; 
 
   samples = new float[(int)( waveSampleRate * timeLength )];
-  for ( int i = 0; i < samples.length; ++i ) 
+  for ( int i = 0; i < samples.length; i++) 
   {    
     float t = i / waveSampleRate ; 
     samples[i] = sin (2* PI* waveFrequency *t)* amp;
