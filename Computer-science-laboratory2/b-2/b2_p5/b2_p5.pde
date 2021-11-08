@@ -7,10 +7,10 @@ FFT fft;
 String windowName;
 
 void setup(){
-  size(512, 1000);
+  size(256, 400);
   minim = new Minim(this);
   //voice = minim.loadFile("../wav/strings_11025.wav", 512);
-    voice = minim.loadFile("../wav/clarinet_11025.wav", 512);
+    voice = minim.loadFile("../wav/clarinet_11025.wav");
   println(voice.length());
   voice.loop();
   
@@ -24,11 +24,16 @@ void draw(){
   stroke(255);
 
   fft.forward(voice.left);
-  for(int i = 0; i< fft.specSize(); i++){
-    //iの取る値を0 ~ スペクトル幅　-> 0 ~ widthに変換(ようするに、xをスペクトル幅の位置にしてる)
-    float x = map(i, 0, fft.specSize(), 0, width);
-    // 高さ - 周波数iの音量 で定数倍することで、波形を大きくしてる
-    line(x, height, x , height - fft.getBand(i)*8);
+  for (int i=0; i< fft.specSize(); i++) {
+     float bandDB = 20 * log(fft.getBand(i) / fft.timeSize() );
+     float bandHeight = map(bandDB, 0, -250, 0, height);
+     line(i, height, i, bandHeight);
   }
   fill(255);
+}
+
+void keyPressed() {
+  if (key=='s') {
+    save("image.png");
+  }
 }

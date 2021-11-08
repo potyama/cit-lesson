@@ -15,7 +15,7 @@ void setup() {
   float waveSampleRate = 11025f;
   float timeLength = 5.0f;
   float amp = 0.6f;
-  float overtones = 10;
+  float overtones = 5;
   float f = 440f;
   float period = waveSampleRate/f;
   float amp_max = 0.0;
@@ -28,19 +28,10 @@ void setup() {
         case 1:
           float tmp = sin(2*PI*(f*j)*t)*(1.0);
           samples[i] += tmp;
-       case 3:
+       case 2:
           float tmp2 = sin(2*PI*(f*j)*t)*(0.38);
           samples[i] += tmp2;
-       case 5:
-          float tmp3 = sin(2*PI*(f*j)*t)*(0.78);
-          samples[i] += tmp3;
-       case 7:
-          float tmp4 = sin(2*PI*(f*j)*t)*(0.26);
-          samples[i] += tmp4;
-       case 9:
-          float tmp5 = sin(2*PI*(f*j)*t)*(0.03);
-          samples[i] += tmp5;
-       default:
+
       }
       }
     if (amp_max < abs(samples[i])) {
@@ -63,18 +54,24 @@ void setup() {
 void draw() {
   background(0);
   stroke(255);
+  fft.forward(wave.left);
 
   /*
   for(int i=0; i<wave.bufferSize() - 1; i++){
    line(i, 100 - wave.left.get(i)*50 , i+1, 100 - wave.left.get(i +1)*50);
    }
-   */
+   
 
   fft.forward(wave.left);
   for (int i=0; i< fft.specSize(); i++) {
     float x = map(i, 0, fft.specSize(), 0, width);
 
     line(x, height, x , height - fft.getBand(i)*8);
+  }*/
+    for (int i=0; i< fft.specSize(); i++) {
+     float bandDB = 20 * log(fft.getBand(i) / fft.timeSize() );
+     float bandHeight = map(bandDB, 0, -250, 0, height);
+     line(i, height, i, bandHeight);
   }
 }
 

@@ -1,0 +1,13 @@
+ LOD 1 54
+ LOD 2 54
+ ADDI 1 2
+ SUBI 2 2
+ JMP 2 L
+ STR 1 93
+ JMP 1 M
+L ADD 1 54
+  ADDI 1 2
+  SUBI 2 1
+  JMP 2 L
+ STR 1 93
+M  HLT 

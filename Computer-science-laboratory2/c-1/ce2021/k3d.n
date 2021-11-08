@@ -1,0 +1,16 @@
+[Memory]
+adr value
+ 54    98
+
+## halt (1635820107)
+
+[Memory]
+adr value
+ 54    98
+ 93  9700
+
+[Register]
+R1: 9700
+R2:   0
+ X: undef
+
